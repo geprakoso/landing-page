@@ -27,6 +27,64 @@ const RollText = ({ text }: { text: string }) => (
   </span>
 )
 
+const RANDOM_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#%&'.split('')
+
+const SlotChar = ({ char, index, isHovered }: { char: string; index: number; isHovered: boolean }) => {
+  const [reel, setReel] = useState<string[]>([char])
+  
+  useEffect(() => {
+    if (isHovered) {
+      const reelLength = 22 + index * 4
+      const newReel = [char]
+      for (let i = 0; i < reelLength - 2; i++) {
+        newReel.push(RANDOM_CHARS[Math.floor(Math.random() * RANDOM_CHARS.length)])
+      }
+      newReel.push(char)
+      setReel(newReel)
+    } else {
+      setReel([char])
+    }
+  }, [isHovered, char, index])
+
+  if (char === ' ') {
+    return <span className="w-[0.25em] inline-block">&nbsp;</span>
+  }
+
+  const duration = 1.2 + index * 0.2
+
+  return (
+    <span className="inline-block h-[20px] overflow-hidden relative">
+      {/* Static hidden character that preserves the native letter width */}
+      <span className="invisible block h-[20px] leading-[20px] select-none">{char}</span>
+      <span
+        className="absolute left-0 top-0 w-full"
+        style={{
+          transform: isHovered && reel.length > 1 
+            ? `translateY(-${(reel.length - 1) * 20}px)` 
+            : 'translateY(0)',
+          transition: isHovered 
+            ? `transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1)` 
+            : 'none',
+        }}
+      >
+        {reel.map((c, i) => (
+          <span key={i} className="block h-[20px] leading-[20px] text-center w-full select-none">
+            {c}
+          </span>
+        ))}
+      </span>
+    </span>
+  )
+}
+
+const SlotText = ({ text, isHovered, className = '' }: { text: string; isHovered: boolean; className?: string }) => (
+  <span className={`inline-block select-none ${className}`}>
+    {text.split('').map((char, index) => (
+      <SlotChar key={index} char={char} index={index} isHovered={isHovered} />
+    ))}
+  </span>
+)
+
 export default function Nav() {
   const location = useLocation()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -212,7 +270,7 @@ export default function Nav() {
             onMouseEnter={() => setHoveredIndex(-1)}
             className="text-xl font-semibold tracking-tight text-zinc-900 relative z-10 logo-link px-4 py-1.5 rounded-full"
           >
-            Kosoga
+            <SlotText text="Kosoga" isHovered={hoveredIndex === -1} className="tracking-tight" />
           </Link>
           <div className="flex items-center gap-6">
             <div className="hidden md:flex items-center gap-1 text-sm text-zinc-500 font-medium">
