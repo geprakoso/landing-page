@@ -104,7 +104,7 @@ export default function Nav() {
       if (location.hash === '#about') setActiveIndex(0)
       else if (location.hash === '#experience') setActiveIndex(1)
       else if (location.hash === '#projects') setActiveIndex(2)
-      else setActiveIndex(null)
+      else setActiveIndex(-1)
     } else {
       setActiveIndex(null)
     }
