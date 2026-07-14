@@ -40,7 +40,17 @@ export default function Hero() {
         body:has(#hero-image-card:hover) {
           overflow: hidden;
         }
+        html.blur-scroll #root {
+          filter: url(#vertical-motion-blur);
+        }
       `}</style>
+      <svg style={{ display: 'none' }}>
+        <defs>
+          <filter id="vertical-motion-blur">
+            <feGaussianBlur id="blur-element" stdDeviation="0,0" />
+          </filter>
+        </defs>
+      </svg>
       <div className="fixed inset-0 bg-black/80 opacity-0 pointer-events-none transition-opacity duration-[1000ms] z-[60] dim-overlay" />
       <div className="grid md:grid-cols-[1fr_440px] gap-12 md:gap-16 items-center">
         <div>
@@ -57,6 +67,46 @@ export default function Hero() {
           <div className="flex flex-wrap items-center gap-4">
             <a
               href="#projects"
+              onClick={(e) => {
+                e.preventDefault();
+                const blurEl = document.getElementById('blur-element');
+                if (!blurEl) return;
+
+                document.documentElement.classList.add('blur-scroll');
+
+                // Animate blur in (0 to 8px)
+                let startIn: number | null = null;
+                const durationIn = 300;
+                const animIn = (timestamp: number) => {
+                  if (!startIn) startIn = timestamp;
+                  const progress = Math.min((timestamp - startIn) / durationIn, 1);
+                  blurEl.setAttribute('stdDeviation', `0, ${progress * 8}`);
+                  if (progress < 1) {
+                    requestAnimationFrame(animIn);
+                  }
+                };
+                requestAnimationFrame(animIn);
+
+                // Scroll
+                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+
+                // Animate blur out (8px to 0) after scroll starts finishing
+                setTimeout(() => {
+                  let startOut: number | null = null;
+                  const durationOut = 300;
+                  const animOut = (timestamp: number) => {
+                    if (!startOut) startOut = timestamp;
+                    const progress = Math.min((timestamp - startOut) / durationOut, 1);
+                    blurEl.setAttribute('stdDeviation', `0, ${8 - progress * 8}`);
+                    if (progress < 1) {
+                      requestAnimationFrame(animOut);
+                    } else {
+                      document.documentElement.classList.remove('blur-scroll');
+                    }
+                  };
+                  requestAnimationFrame(animOut);
+                }, 750);
+              }}
               className="bg-zinc-900 hover:bg-zinc-800 text-white px-6 py-3.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all"
             >
               View Projects <ArrowDown className="w-4 h-4" />
