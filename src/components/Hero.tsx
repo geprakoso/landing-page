@@ -40,17 +40,7 @@ export default function Hero() {
         body:has(#hero-image-card:hover) {
           overflow: hidden;
         }
-        html.blur-scroll #root {
-          filter: url(#vertical-motion-blur);
-        }
       `}</style>
-      <svg style={{ display: 'none' }}>
-        <defs>
-          <filter id="vertical-motion-blur">
-            <feGaussianBlur id="blur-element" stdDeviation="0,0" />
-          </filter>
-        </defs>
-      </svg>
       <div className="fixed inset-0 bg-black/80 opacity-0 pointer-events-none transition-opacity duration-[1000ms] z-[60] dim-overlay" />
       <div className="grid md:grid-cols-[1fr_440px] gap-12 md:gap-16 items-center">
         <div>
@@ -76,7 +66,7 @@ export default function Hero() {
 
                 // Animate blur in (0 to 8px)
                 let startIn: number | null = null;
-                const durationIn = 300;
+                const durationIn = 200;
                 const animIn = (timestamp: number) => {
                   if (!startIn) startIn = timestamp;
                   const progress = Math.min((timestamp - startIn) / durationIn, 1);
@@ -93,7 +83,7 @@ export default function Hero() {
                 // Animate blur out (8px to 0) after scroll starts finishing
                 setTimeout(() => {
                   let startOut: number | null = null;
-                  const durationOut = 300;
+                  const durationOut = 200;
                   const animOut = (timestamp: number) => {
                     if (!startOut) startOut = timestamp;
                     const progress = Math.min((timestamp - startOut) / durationOut, 1);
