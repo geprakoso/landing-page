@@ -8,6 +8,24 @@ const links = [
   { label: 'Contact', href: '/contact' },
 ]
 
+const RollText = ({ text }: { text: string }) => (
+  <span className="inline-flex overflow-hidden h-[20px] leading-[20px] relative select-none">
+    {text.split('').map((char, index) => (
+      <span
+        key={index}
+        className="block relative transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] transform group-hover:-translate-y-[20px]"
+        style={{
+          transitionDelay: `${index * 0.02}s`,
+          textShadow: '0 20px 0 currentColor',
+          paddingRight: char === ' ' ? '0.25em' : '0',
+        }}
+      >
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    ))}
+  </span>
+)
+
 export default function Nav() {
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (window.location.pathname === '/' && href.startsWith('/#')) {
@@ -78,9 +96,9 @@ export default function Nav() {
                   key={l.href}
                   to={l.href}
                   onClick={(e) => handleLinkClick(e, l.href)}
-                  className="hover:text-zinc-900 transition-colors"
+                  className="hover:text-zinc-900 transition-colors group py-2"
                 >
-                  {l.label}
+                  <RollText text={l.label} />
                 </Link>
               ))}
             </div>

@@ -59,7 +59,7 @@ function NavigationWrapper() {
         </svg>
         
         <div 
-          className="flex w-[calc(200vw+40px)] min-h-screen transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="flex w-[calc(200vw+40px)] min-h-screen transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] items-start"
           style={{
             transform: isContact ? 'translateX(calc(-100vw - 40px))' : 'translateX(0)',
             filter: isTransitioning ? 'url(#horizontal-motion-blur)' : 'none',
@@ -67,15 +67,27 @@ function NavigationWrapper() {
           }}
         >
           {/* Home Screen (Page 1) */}
-          <div className="w-screen shrink-0 bg-white">
+          <div 
+            className="w-screen shrink-0 bg-white"
+            style={{
+              height: isContact ? '100vh' : 'auto',
+              overflow: isContact ? 'hidden' : 'visible',
+            }}
+          >
             <PortfolioLanding />
           </div>
           
           {/* Black Gap */}
-          <div className="w-[40px] shrink-0 bg-black" />
+          <div className="w-[40px] shrink-0 bg-black self-stretch" />
 
           {/* Contact Screen (Page 2) */}
-          <div className="w-screen shrink-0 bg-white">
+          <div 
+            className="w-screen shrink-0 bg-white"
+            style={{
+              height: !isContact ? '100vh' : 'auto',
+              overflow: !isContact ? 'hidden' : 'visible',
+            }}
+          >
             <ContactPage />
           </div>
         </div>
