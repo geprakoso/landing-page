@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "PP Neue Montreal Medium";
+  src: url("https://framerusercontent.com/assets/6uIfYl8bnz9kOy3KOuV7PxhFPhA.woff2");
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "PP Neue Montreal Bold";
+  src: url("https://framerusercontent.com/assets/wa1QQCb6cXOn2xBXS059rEsCfsc.woff2");
+  font-style: normal;
+  font-weight: 700;
+}
