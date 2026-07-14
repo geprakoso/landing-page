@@ -1,5 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const links = [
   { label: 'About', href: '/#about' },
@@ -27,6 +28,113 @@ const RollText = ({ text }: { text: string }) => (
 )
 
 export default function Nav() {
+  const location = useLocation()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const [pillStyle, setPillStyle] = useState<React.CSSProperties>({
+    left: 0,
+    width: 0,
+    opacity: 0,
+  })
+
+  // Detect active index on initial load/path changes
+  useEffect(() => {
+    if (location.pathname === '/contact') {
+      setActiveIndex(3)
+    } else if (location.pathname === '/') {
+      if (location.hash === '#about') setActiveIndex(0)
+      else if (location.hash === '#experience') setActiveIndex(1)
+      else if (location.hash === '#projects') setActiveIndex(2)
+      else setActiveIndex(null)
+    } else {
+      setActiveIndex(null)
+    }
+  }, [location.pathname])
+
+  // Scroll spy to update active index on scroll
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      return
+    }
+
+    const sectionIds = ['about', 'experience', 'projects']
+    
+    // We add a slight timeout to wait for elements to be fully mounted in the DOM
+    const setupObserver = () => {
+      const elements = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+      
+      const observerOptions = {
+        root: null,
+        rootMargin: '-30% 0px -60% 0px',
+        threshold: 0,
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id
+            if (id === 'about') setActiveIndex(0)
+            else if (id === 'experience') setActiveIndex(1)
+            else if (id === 'projects') setActiveIndex(2)
+          }
+        })
+      }, observerOptions)
+
+      elements.forEach(el => observer.observe(el))
+
+      return () => {
+        elements.forEach(el => observer.unobserve(el))
+      }
+    }
+
+    const cleanupObserver = setupObserver()
+
+    // Handle scroll back to top of page (reset active index to logo / -1)
+    const handleScroll = () => {
+      if (window.scrollY < 100) {
+        setActiveIndex(-1)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      cleanupObserver()
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [location.pathname])
+
+  // Update pill coordinates based on hover or active index
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const targetIndex = hoveredIndex !== null ? hoveredIndex : activeIndex
+    if (targetIndex === null) {
+      setPillStyle((prev) => ({ ...prev, opacity: 0 }))
+      return
+    }
+
+    let targetElement: HTMLElement | null = null
+
+    if (targetIndex === -1) {
+      targetElement = container.querySelector('.logo-link') as HTMLElement
+    } else {
+      const linksElements = container.querySelectorAll('.menu-item-link')
+      targetElement = linksElements[targetIndex] as HTMLElement
+    }
+
+    if (targetElement) {
+      setPillStyle({
+        left: targetElement.offsetLeft,
+        width: targetElement.offsetWidth,
+        height: targetElement.offsetHeight,
+        top: targetElement.offsetTop,
+        opacity: 1,
+      })
+    }
+  }, [hoveredIndex, activeIndex])
+
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (window.location.pathname === '/' && href.startsWith('/#')) {
       e.preventDefault()
@@ -85,18 +193,40 @@ export default function Nav() {
         </defs>
       </svg>
       <nav className="sticky top-0 z-[80] bg-white/70 backdrop-blur-lg border-b border-gray-200 w-full">
-        <div className="flex items-center justify-between px-6 md:px-10 py-5 max-w-7xl mx-auto">
-          <Link to="/" className="text-xl font-semibold tracking-tight text-zinc-900">
+        <div 
+          ref={containerRef}
+          onMouseLeave={() => setHoveredIndex(null)}
+          className="flex items-center justify-between px-6 md:px-10 py-5 max-w-7xl mx-auto relative"
+        >
+          {/* Sliding Pill Background */}
+          <div 
+            className="absolute bg-zinc-100 rounded-full transition-all duration-[400ms] pointer-events-none z-0"
+            style={{
+              ...pillStyle,
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}
+          />
+
+          <Link 
+            to="/" 
+            onMouseEnter={() => setHoveredIndex(-1)}
+            className="text-xl font-semibold tracking-tight text-zinc-900 relative z-10 logo-link px-4 py-1.5 rounded-full"
+          >
             Kosoga
           </Link>
           <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center gap-8 text-sm text-zinc-500 font-medium">
-              {links.map((l) => (
+            <div className="hidden md:flex items-center gap-1 text-sm text-zinc-500 font-medium">
+              {links.map((l, index) => (
                 <Link
                   key={l.href}
                   to={l.href}
+                  onMouseEnter={() => setHoveredIndex(index)}
                   onClick={(e) => handleLinkClick(e, l.href)}
-                  className="hover:text-zinc-900 transition-colors group py-2"
+                  className={`transition-colors group px-4 py-2 relative z-10 menu-item-link ${
+                    (hoveredIndex !== null ? hoveredIndex === index : activeIndex === index) 
+                      ? 'text-zinc-900' 
+                      : 'hover:text-zinc-900'
+                  }`}
                 >
                   <RollText text={l.label} />
                 </Link>
@@ -104,7 +234,7 @@ export default function Nav() {
             </div>
             <Link
               to="/contact"
-              className="bg-zinc-900 hover:bg-zinc-800 text-white px-5 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all"
+              className="bg-zinc-900 hover:bg-zinc-800 text-white px-5 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all relative z-10"
             >
               Let&apos;s Talk <ArrowUpRight className="w-4 h-4" />
             </Link>
