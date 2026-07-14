@@ -29,11 +29,37 @@ const RollText = ({ text }: { text: string }) => (
 
 const RANDOM_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#%&'.split('')
 
-const SlotChar = ({ char, index, isHovered }: { char: string; index: number; isHovered: boolean }) => {
+const SlotChar = ({ char, index, isHovered, isActive = false }: { char: string; index: number; isHovered: boolean; isActive?: boolean }) => {
   const [reel, setReel] = useState<string[]>([char])
-  
+  const [isSpinning, setIsSpinning] = useState(false)
+  const prevActiveRef = useRef<boolean | undefined>(undefined)
+
   useEffect(() => {
     if (isHovered) {
+      setIsSpinning(true)
+      return
+    }
+
+    const wasActive = prevActiveRef.current
+    prevActiveRef.current = isActive
+
+    // Trigger spin if it becomes active (either on mount or when scrolling back up)
+    if (isActive && (wasActive === false || wasActive === undefined)) {
+      setIsSpinning(true)
+      const duration = (1.2 + index * 0.2) * 1000
+      const timer = setTimeout(() => {
+        setIsSpinning(false)
+      }, duration)
+      return () => clearTimeout(timer)
+    }
+
+    if (!isActive) {
+      setIsSpinning(false)
+    }
+  }, [isActive, isHovered, index])
+
+  useEffect(() => {
+    if (isSpinning) {
       const reelLength = 22 + index * 4
       const newReel = [char]
       for (let i = 0; i < reelLength - 2; i++) {
@@ -44,7 +70,7 @@ const SlotChar = ({ char, index, isHovered }: { char: string; index: number; isH
     } else {
       setReel([char])
     }
-  }, [isHovered, char, index])
+  }, [isSpinning, char, index])
 
   if (char === ' ') {
     return <span className="w-[0.25em] inline-block">&nbsp;</span>
@@ -59,10 +85,10 @@ const SlotChar = ({ char, index, isHovered }: { char: string; index: number; isH
       <span
         className="absolute left-0 top-0 w-full"
         style={{
-          transform: isHovered && reel.length > 1 
+          transform: isSpinning && reel.length > 1 
             ? `translateY(-${(reel.length - 1) * 20}px)` 
             : 'translateY(0)',
-          transition: isHovered 
+          transition: isSpinning 
             ? `transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1)` 
             : 'none',
         }}
@@ -77,10 +103,10 @@ const SlotChar = ({ char, index, isHovered }: { char: string; index: number; isH
   )
 }
 
-const SlotText = ({ text, isHovered, className = '' }: { text: string; isHovered: boolean; className?: string }) => (
+const SlotText = ({ text, isHovered, isActive = false, className = '' }: { text: string; isHovered: boolean; isActive?: boolean; className?: string }) => (
   <span className={`inline-block select-none ${className}`}>
     {text.split('').map((char, index) => (
-      <SlotChar key={index} char={char} index={index} isHovered={isHovered} />
+      <SlotChar key={index} char={char} index={index} isHovered={isHovered} isActive={isActive} />
     ))}
   </span>
 )
@@ -270,7 +296,7 @@ export default function Nav() {
             onMouseEnter={() => setHoveredIndex(-1)}
             className="text-xl font-semibold tracking-tight text-zinc-900 relative z-10 logo-link px-4 py-1.5 rounded-full"
           >
-            <SlotText text="Kosoga" isHovered={hoveredIndex === -1} className="tracking-tight" />
+            <SlotText text="Kosoga" isHovered={hoveredIndex === -1} isActive={activeIndex === -1} className="tracking-tight" />
           </Link>
           <div className="flex items-center gap-6">
             <div className="hidden md:flex items-center gap-1 text-sm text-zinc-500 font-medium">
