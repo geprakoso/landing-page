@@ -9,7 +9,7 @@ const links = [
 
 export default function Nav() {
   return (
-    <nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-gray-200 w-full">
+    <nav className="sticky top-0 z-[80] bg-white/70 backdrop-blur-lg border-b border-gray-200 w-full">
       <div className="flex items-center justify-between px-6 md:px-10 py-5 max-w-7xl mx-auto">
         <a href="/" className="text-xl font-semibold tracking-tight text-zinc-900">
           Kosoga
