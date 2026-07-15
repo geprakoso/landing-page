@@ -6,7 +6,6 @@ const links = [
   { label: 'About', href: '/#about' },
   { label: 'Experience', href: '/#experience' },
   { label: 'Projects', href: '/#projects' },
-  { label: 'Contact', href: '/contact' },
 ]
 
 const RollText = ({ text }: { text: string }) => (
@@ -85,11 +84,11 @@ const SlotChar = ({ char, index, isHovered, isActive = false }: { char: string; 
       <span
         className="absolute left-0 top-0 w-full"
         style={{
-          transform: isSpinning && reel.length > 1 
-            ? `translateY(-${(reel.length - 1) * 20}px)` 
+          transform: isSpinning && reel.length > 1
+            ? `translateY(-${(reel.length - 1) * 20}px)`
             : 'translateY(0)',
-          transition: isSpinning 
-            ? `transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1)` 
+          transition: isSpinning
+            ? `transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1)`
             : 'none',
         }}
       >
@@ -122,7 +121,6 @@ export default function Nav() {
     opacity: 0,
   })
 
-  // Detect active index on initial load/path changes
   useEffect(() => {
     if (location.pathname === '/contact') {
       setActiveIndex(3)
@@ -143,11 +141,11 @@ export default function Nav() {
     }
 
     const sectionIds = ['about', 'experience', 'projects']
-    
+
     // We add a slight timeout to wait for elements to be fully mounted in the DOM
     const setupObserver = () => {
       const elements = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
-      
+
       const observerOptions = {
         root: null,
         rootMargin: '-30% 0px -60% 0px',
@@ -203,6 +201,8 @@ export default function Nav() {
 
     if (targetIndex === -1) {
       targetElement = container.querySelector('.logo-link') as HTMLElement
+    } else if (targetIndex === 3) {
+      targetElement = container.querySelector('.talk-button') as HTMLElement
     } else {
       const linksElements = container.querySelectorAll('.menu-item-link')
       targetElement = linksElements[targetIndex] as HTMLElement
@@ -267,6 +267,26 @@ export default function Nav() {
     }
   }
 
+  const [isPressed, setIsPressed] = useState(false)
+  const pressStartTime = useRef<number>(0)
+
+  const handleMouseDown = () => {
+    setIsPressed(true)
+    pressStartTime.current = Date.now()
+  }
+
+  const handleMouseUp = () => {
+    const elapsed = Date.now() - pressStartTime.current
+    const minDuration = 120
+    if (elapsed < minDuration) {
+      setTimeout(() => {
+        setIsPressed(false)
+      }, minDuration - elapsed)
+    } else {
+      setIsPressed(false)
+    }
+  }
+
   return (
     <>
       <svg style={{ display: 'none' }}>
@@ -277,13 +297,13 @@ export default function Nav() {
         </defs>
       </svg>
       <nav className="sticky top-0 z-[80] bg-white/70 backdrop-blur-lg border-b border-gray-200 w-full">
-        <div 
+        <div
           ref={containerRef}
           onMouseLeave={() => setHoveredIndex(null)}
           className="flex items-center justify-between px-6 md:px-10 py-5 max-w-7xl mx-auto relative"
         >
           {/* Sliding Pill Background */}
-          <div 
+          <div
             className="absolute bg-zinc-100 rounded-full transition-all duration-[400ms] pointer-events-none z-0"
             style={{
               ...pillStyle,
@@ -291,8 +311,8 @@ export default function Nav() {
             }}
           />
 
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             onMouseEnter={() => setHoveredIndex(-1)}
             className="text-xl font-semibold tracking-tight text-zinc-900 relative z-10 logo-link px-4 py-1.5 rounded-full"
           >
@@ -306,11 +326,10 @@ export default function Nav() {
                   to={l.href}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onClick={(e) => handleLinkClick(e, l.href)}
-                  className={`transition-colors group px-4 py-2 relative z-10 menu-item-link ${
-                    (hoveredIndex !== null ? hoveredIndex === index : activeIndex === index) 
-                      ? 'text-zinc-900' 
-                      : 'hover:text-zinc-900'
-                  }`}
+                  className={`transition-colors group px-4 py-2 relative z-10 menu-item-link ${(hoveredIndex !== null ? hoveredIndex === index : activeIndex === index)
+                    ? 'text-zinc-900'
+                    : 'hover:text-zinc-900'
+                    }`}
                 >
                   <RollText text={l.label} />
                 </Link>
@@ -318,7 +337,23 @@ export default function Nav() {
             </div>
             <Link
               to="/contact"
-              className="bg-zinc-900 hover:bg-zinc-800 text-white px-5 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all relative z-10"
+              onMouseEnter={() => setHoveredIndex(3)}
+              onMouseDown={handleMouseDown}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={() => {
+                setIsPressed(false)
+              }}
+              className={`text-white px-5 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all relative z-10 talk-button ${
+                (hoveredIndex === 3 || activeIndex === 3)
+                  ? 'bg-zinc-900 shadow-lg'
+                  : 'bg-zinc-900'
+              }`}
+              style={{
+                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                transitionDuration: '400ms',
+                transform: `scale(${isPressed ? 0.93 : (hoveredIndex === 3 || activeIndex === 3) ? 1.08 : 1})`,
+                willChange: 'transform'
+              }}
             >
               Let&apos;s Talk <ArrowUpRight className="w-4 h-4" />
             </Link>
