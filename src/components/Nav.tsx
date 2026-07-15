@@ -390,11 +390,14 @@ export default function Nav() {
 
       {/* Mobile Menu Panel */}
       <div 
-        className={`md:hidden fixed bottom-20 left-1/2 -translate-x-1/2 w-[calc(100vw-32px)] max-w-xs bg-white border border-zinc-200 shadow-2xl rounded-2xl p-4 z-[89] flex flex-col gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isMobileMenuOpen 
-            ? 'opacity-100 translate-y-0 scale-100' 
-            : 'opacity-0 translate-y-4 scale-95 pointer-events-none'
+        className={`md:hidden fixed bottom-20 left-1/2 w-[calc(100vw-32px)] max-w-xs bg-white border border-zinc-200 shadow-2xl rounded-2xl p-4 z-[89] flex flex-col gap-3 origin-bottom ${
+          isMobileMenuOpen ? '' : 'pointer-events-none'
         }`}
+        style={{
+          transition: 'transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 450ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+          transform: `translateX(-50%) ${isMobileMenuOpen ? 'translateY(0) scale(1)' : 'translateY(48px) scale(0.6)'}`,
+          opacity: isMobileMenuOpen ? 1 : 0
+        }}
       >
         <div className="flex flex-col gap-1 text-center font-medium">
           {links.map((l) => (
