@@ -148,7 +148,7 @@ export default function Nav() {
 
       const observerOptions = {
         root: null,
-        rootMargin: '-30% 0px -60% 0px',
+        rootMargin: '-20% 0px -35% 0px',
         threshold: 0,
       }
 
@@ -268,6 +268,7 @@ export default function Nav() {
   }
 
   const [isPressed, setIsPressed] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pressStartTime = useRef<number>(0)
 
   const handleMouseDown = () => {
@@ -284,6 +285,12 @@ export default function Nav() {
       }, minDuration - elapsed)
     } else {
       setIsPressed(false)
+    }
+  }
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
@@ -314,6 +321,7 @@ export default function Nav() {
           <Link
             to="/"
             onMouseEnter={() => setHoveredIndex(-1)}
+            onClick={handleLogoClick}
             className="text-xl font-semibold tracking-tight text-zinc-900 relative z-10 logo-link px-4 py-1.5 rounded-full"
           >
             <SlotText text="Kosoga" isHovered={hoveredIndex === -1} isActive={activeIndex === -1} className="tracking-tight" />
@@ -360,6 +368,58 @@ export default function Nav() {
           </div>
         </div>
       </nav>
+
+      {/* Mobile Floating Menu Button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] bg-white text-zinc-900 border border-zinc-200 shadow-lg p-2.5 rounded-full flex items-center justify-center transition-all duration-200 active:scale-[0.9] hover:scale-[1.05] w-10 h-10"
+        aria-label="Toggle menu"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
+        </svg>
+      </button>
+
+      {/* Backdrop */}
+      <div 
+        onClick={() => setIsMobileMenuOpen(false)}
+        className={`md:hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-[88] transition-opacity duration-300 ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      {/* Mobile Menu Panel */}
+      <div 
+        className={`md:hidden fixed bottom-20 left-1/2 -translate-x-1/2 w-[calc(100vw-32px)] max-w-xs bg-white border border-zinc-200 shadow-2xl rounded-2xl p-4 z-[89] flex flex-col gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isMobileMenuOpen 
+            ? 'opacity-100 translate-y-0 scale-100' 
+            : 'opacity-0 translate-y-4 scale-95 pointer-events-none'
+        }`}
+      >
+        <div className="flex flex-col gap-1 text-center font-medium">
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              to={l.href}
+              onClick={(e) => {
+                setIsMobileMenuOpen(false)
+                handleLinkClick(e, l.href)
+              }}
+              className="text-zinc-600 hover:text-zinc-900 py-2 px-4 rounded-xl hover:bg-zinc-50 active:bg-zinc-100 transition-colors"
+            >
+              {l.label}
+            </Link>
+          ))}
+          <hr className="border-zinc-100 my-1" />
+          <Link
+            to="/contact"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="bg-zinc-900 hover:bg-zinc-800 text-white py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 font-medium transition-colors"
+          >
+            Let&apos;s Talk <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
     </>
   )
 }
