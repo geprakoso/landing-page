@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ArrowUpRight, ArrowDown, Linkedin, Instagram, Github } from 'lucide-react'
 
 const Threads = (props: React.SVGProps<SVGSVGElement>) => (
@@ -18,6 +19,8 @@ const trustedLogos = [
 ]
 
 export default function Hero() {
+  const [isCardActive, setIsCardActive] = useState(false)
+
   return (
     <section className="max-w-7xl mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-20">
       <style>{`
@@ -34,14 +37,23 @@ export default function Hero() {
           -webkit-mask: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
           mask: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
         }
-        body:has(#hero-image-card:hover) .dim-overlay {
+        body:has(#hero-image-card.active-effect) .dim-overlay {
           opacity: 1;
+          pointer-events: auto;
         }
-        body:has(#hero-image-card:hover) {
+        body:has(#hero-image-card.active-effect) {
           overflow: hidden;
         }
       `}</style>
-      <div className="fixed inset-0 bg-black/80 opacity-0 pointer-events-none transition-opacity duration-[1000ms] z-[60] dim-overlay" />
+      <div 
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsCardActive(false);
+        }}
+        className={`fixed inset-0 bg-black/80 opacity-0 pointer-events-none transition-opacity duration-[1000ms] z-[60] dim-overlay ${
+          isCardActive ? 'opacity-100 pointer-events-auto' : ''
+        }`} 
+      />
       <div className="grid md:grid-cols-[1fr_440px] gap-12 md:gap-16 items-center">
         <div>
           <div className="flex items-center gap-3 text-xs font-semibold tracking-widest text-zinc-400 uppercase mb-6">
@@ -109,22 +121,32 @@ export default function Hero() {
             </a>
           </div>
         </div>
-        <div id="hero-image-card" className="relative w-full max-w-[440px] aspect-[11/14] rounded-2xl overflow-hidden group shadow-2xl z-[70]">
+        <div 
+          id="hero-image-card" 
+          onMouseEnter={() => setIsCardActive(true)}
+          onMouseLeave={() => setIsCardActive(false)}
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsCardActive(!isCardActive)
+          }}
+          className={`relative w-full max-w-[440px] aspect-[11/14] rounded-2xl overflow-hidden group shadow-2xl z-[70] cursor-pointer ${
+            isCardActive ? 'active-effect' : ''
+          }`}
+        >
           <img
             src="/hero.avif"
             alt="Soga"
-            className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-[1000ms] group-hover:scale-[2] origin-left group-hover:object-left"
+            className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-[1000ms] group-hover:scale-[2] group-[.active-effect]:scale-[2] origin-left group-hover:object-left group-[.active-effect]:object-left"
           />
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-[1000ms] pointer-events-none" />
-          <h2 className="absolute top-6 left-6 font-sans text-3xl text-white font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-[1000ms]">
+          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 group-[.active-effect]:opacity-100 transition-opacity duration-[1000ms] pointer-events-none" />
+          <h2 className="absolute top-6 left-6 font-sans text-3xl text-white font-medium opacity-0 group-hover:opacity-100 group-[.active-effect]:opacity-100 transition-opacity duration-[1000ms]">
             Prakoso Galih
           </h2>
-          <div className="absolute left-6 bottom-6 flex flex-col items-center gap-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-[1000ms]">
+          <div className="absolute left-6 bottom-6 flex flex-col items-center gap-4 text-white opacity-0 group-hover:opacity-100 group-[.active-effect]:opacity-100 transition-opacity duration-[1000ms]">
             <a href="#" className="hover:text-blue-400 transition-colors"><Linkedin className="w-5 h-5" /></a>
             <a href="#" className="hover:text-pink-400 transition-colors"><Instagram className="w-5 h-5" /></a>
             <a href="#" className="hover:text-rose-400 transition-colors"><Github className="w-5 h-5" /></a>
             <a href="#" className="hover:text-blue-400 transition-colors"><Threads className="w-5 h-5" /></a>
-            {/* <a href="#" className="hover:text-blue-600 transition-colors"><Facebook className="w-5 h-5" /></a> */}
           </div>
         </div>
       </div>
