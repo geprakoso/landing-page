@@ -2,25 +2,11 @@ import { ArrowUpRight, ArrowRight } from 'lucide-react'
 
 const projects = [
   {
-    category: 'ERP Software',
-    title: 'Helio Analytics',
+    category: 'Enterprise Software',
+    title: 'Arabica ERP & POS',
     description:
-      'A real-time analytics suite handling millions of events a day, rebuilt for sub-second dashboards and a calmer information hierarchy.',
-    tags: ['Laravel', 'PHP', 'MySQL', 'Docker', 'Nginx'],
-  },
-  {
-    category: 'Fintech',
-    title: 'Drift Finance',
-    description:
-      'End-to-end product design and front-end for a consumer banking experience focused on trust, speed, and clarity.',
-    tags: ['Laravel', 'Vue.js', 'Docker', 'Nginx', 'MySQL'],
-  },
-  {
-    category: 'Mobile App',
-    title: 'Atlas Docs',
-    description:
-      'A documentation platform with instant search and a writing experience engineered to keep teams in flow.',
-    tags: ['Flutter', 'Shadcn UI', 'Supabase'],
+      'A production ERP and point-of-sale system serving daily concurrent users across retail operations. Built to handle inventory, HR, payroll, and financial reporting. Engineered with ACID-safe database transactions for stock mutations and automated synchronization with WooCommerce. Deployed via Docker on self-hosted TrueNAS infrastructure.',
+    tags: ['Laravel', 'Livewire','PHP', 'MySQL', 'Redis', 'TrueNAS', 'Docker', 'Nginx'],
   },
 ]
 
@@ -40,8 +26,12 @@ export default function Projects() {
               key={p.title}
               className="border border-zinc-200 rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-zinc-200"
             >
-              <div className="bg-zinc-100 aspect-[4/3] md:aspect-auto flex items-center justify-center text-zinc-300 text-sm font-medium">
-                {p.title} Screenshot
+              <div className="aspect-[4/3] md:aspect-auto overflow-hidden">
+                <img
+                  src="/Arabica.jpg"
+                  alt={`${p.title} Screenshot`}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6 md:p-16 flex flex-col justify-center">
                 <span className="text-xs font-mono text-zinc-400 mb-2">
@@ -64,14 +54,14 @@ export default function Projects() {
                   ))}
                 </div>
                 <div className="flex items-center gap-3 text-sm font-medium">
-                  <a
+                  {/* <a
                     href="https://example.com"
                     className="px-5 py-2.5 bg-zinc-900 text-white hover:bg-zinc-800 rounded-full transition-colors flex items-center gap-1.5"
                   >
                     Visit Live <ArrowUpRight className="w-4 h-4" />
-                  </a>
+                  </a> */}
                   <a
-                    href="https://example.com"
+                    href="https://github.com/geprakoso/arabica-erp"
                     className="px-5 py-2.5 bg-white text-zinc-900 border border-zinc-200 hover:bg-zinc-50 rounded-full transition-colors flex items-center gap-1.5"
                   >
                     Read the Story <ArrowRight className="w-4 h-4" />

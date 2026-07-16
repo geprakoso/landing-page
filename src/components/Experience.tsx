@@ -1,27 +1,19 @@
 const experiences = [
   {
-    period: '2023 \u2014 Present',
-    title: 'Full Stack Engineer',
+    period: '2020 \u2014 2026',
+    title: 'Full-Stack Developer & DevOps Engineer at Haen Teknologi Nusantara',
     company: 'Arabica ERP SME Software',
     description:
-      "Lead front-end for a real-time analytics platform \u2014 owning the design system, performance budget, and the team's engineering standards.",
-    tags: ['Laravel', 'PHP', 'MySQL', 'Docker', 'Nginx'],
+      "Lead the development of internal operations software and manage the company's self-hosted infrastructure. Responsibilities include engineering backend systems, enforcing data integrity for concurrent users, and maintaining the full DevOps lifecycle across TrueNAS and Linux servers.",
+    tags: ['Laravel', 'PHP', 'MySQL', 'Docker', 'Nginx', 'TrueNAS', 'Ubuntu VPS'],
   },
   {
-    period: '2021 \u2014 2023',
-    title: 'Full-Stack Engineer',
-    company: 'Hook ERP Software (Open Source)',
+    period: '2017 \u2014 Present',
+    title: 'Freelance Developer & Infrastructure Engineer',
+    company: 'Various Clients',
     description:
-      'Built core banking flows end to end, from Postgres schema to pixel, for a consumer fintech used by half a million people.',
-    tags: ['Laravel', 'Vue.js', 'Docker', 'Nginx', 'MySQL'],
-  },
-  {
-    period: '2019 \u2014 2021',
-    title: 'Full-Stack Engineer',
-    company: 'Circul Open Source',
-    description:
-      'Shipped a documentation platform with instant search and an editor experience built to keep writers in flow.',
-    tags: ['Flutter', 'Shadcn UI', 'Supabase'],
+      'Set up, manage, and maintain cloud infrastructure and web deployments for multiple clients. Work involves configuring AWS and Linux VPS environments, managing Cloudflare networking (DNS, Tunnels, Zero Trust), and deploying optimized e-commerce platforms.',
+    tags: ['AWS', 'Google Cloud', 'Cloudflare', 'Docker', 'Nginx', 'MySQL', 'Ubuntu VPS'],
   },
 ]
 

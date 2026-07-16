@@ -2,27 +2,19 @@ import { GitBranch, ExternalLink } from 'lucide-react'
 
 const repos = [
   {
-    name: 'Hook',
-    stars: '1,240',
+    name: 'Hook ERP Software',
+    stars: 'Open Source',
     description:
-      'An ERP Software for small to medium business built with Laravel and Vue.js with blazing fast performance.',
+      'An open-source business management and POS system designed for small to medium enterprises. Served as the primary front-end contributor, building responsive single-page application workflows and designing a Docker-compatible deployment structure for queue-based processing.',
     tag: 'LARAVEL',
     github: 'https://github.com/alamulhuda/hook',
     demo: 'https://example.com',
   },
   {
-    name: 'Monthly Report',
-    stars: '2,100',
-    description: 'A 1kb client-side router with zero config.',
-    tag: 'JavaScript',
-    github: 'https://github.com/geprakoso/monthlyreport',
-    demo: 'https://example.com',
-  },
-  {
     name: 'Circul',
-    stars: '860',
-    description: 'A dependency-free React hook for throttled values.',
-    tag: 'React',
+    stars: 'Open Source',
+    description: 'A prototype mobile application for community-driven waste mapping and environmental reporting. Architected with a local-first offline persistence model using SQLite and Supabase sync, featuring GPS-tagged photo reports and geospatial visualization via OpenStreetMap.',
+    tag: ['Flutter', 'Supabase', 'OSM'],
     github: 'https://github.com/geprakoso/circul',
     demo: 'https://example.com',
   },
@@ -54,7 +46,7 @@ export default function OpenSource() {
                 {r.description}
               </p>
               <span className="text-[10px] font-semibold tracking-widest text-zinc-400 mb-4">
-                {r.tag}
+                {Array.isArray(r.tag) ? r.tag.join(', ') : r.tag}
               </span>
               <div className="flex items-center gap-4 text-sm font-medium">
                 <a
