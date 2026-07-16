@@ -1,4 +1,4 @@
-import { ArrowUpRight, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 const projects = [
   {
