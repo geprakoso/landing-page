@@ -1,12 +1,18 @@
 const tools = [
+  'Laravel',
+  'PHP',
+  'MySQL',
+  'Redis',
   'React',
-  'Next.js',
   'TypeScript',
-  'Node.js',
+  'Vue.js',
   'Postgres',
   'Supabase',
   'AWS',
   'Docker',
+  'Cloudflare',
+  'Nginx',
+  'Ubuntu VPS',
   'Tailwind',
 ]
 

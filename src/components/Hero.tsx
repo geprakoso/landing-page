@@ -61,10 +61,10 @@ export default function Hero() {
             Full Stack Developer
           </div>
           <h1 className="text-4xl md:text-6xl font-sans max-w-lg font-medium lg:text-6xl leading-[1.05] tracking-tight text-zinc-900 mb-6">
-            Hi, I&apos;m Soga. I write the code and manage the servers it runs on.
+            Hi, I&apos;m Soga. A Full-Stack Developer with deep DevOps expertise.
           </h1>
           <p className="text-zinc-500 text-xl max-w-md leading-relaxed max-w-xl mb-10">
-            I'm a full-stack developer and sysadmin with over 6 years of experience. I build web apps with Laravel and Vue, and I handle my own DevOps—deploying securely using Docker, Cloudflare, and cloud platforms like AWS, GCP, and Oracle.
+            I'm a full-stack developer with 6+ years of experience building business applications. I specialize in Laravel and Vue.js, and I handle my own production deployments using Docker, Linux VPS, and Cloudflare.
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <a

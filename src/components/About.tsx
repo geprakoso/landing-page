@@ -14,20 +14,14 @@ export default function About() {
         </span>
         <div className="grid md:grid-cols-[1.5fr_1fr] gap-x-56 mb-16">
           <h2 className="text-42 md:text-4xl font-medium tracking-tight text-zinc-900">
-            A design-minded developer obsessed with performance, clean architecture
-            and user experience.
+            A developer focused on stable architecture and actual server realities.
           </h2>
           <div className="space-y-6">
             <p className="text-zinc-500 text-lg leading-relaxed">
-              For the past seven years I&apos;ve helped startups and product teams
-              turn ambitious ideas into software people genuinely like to use. I care
-              about the whole stack — the database query, the API contract, the
-              animation curve.
+              I help businesses build internal tools like ERPs and POS systems. But instead of just focusing on the frontend, I spend my time making sure the backend is solid and the deployment architecture makes sense.
             </p>
             <p className="text-zinc-500 text-lg leading-relaxed mb-5">
-              My work sits at the intersection of engineering and design: fast,
-              accessible, and quietly considered. No fireworks, just products that
-              feel right.
+              From writing the database queries to configuring TrueNAS and Nginx, my goal is always to build systems that are easy to maintain and hard to break.
             </p>
           </div>
         </div>
