@@ -12,7 +12,8 @@ export default function Contact() {
     setSubmitStatus('idle')
     setErrorMessage('')
 
-    const formData = new FormData(e.currentTarget)
+    const form = e.currentTarget
+    const formData = new FormData(form)
     
     // Get access key from env or fallback to placeholder
     const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
@@ -39,12 +40,13 @@ export default function Contact() {
       if (data.success) {
         setSubmitStatus('success')
         // Reset form
-        e.currentTarget.reset()
+        form.reset()
       } else {
         setSubmitStatus('error')
         setErrorMessage(data.message || 'Something went wrong. Please try again.')
       }
     } catch (error) {
+      console.error('Web3Forms Submission Error:', error)
       setSubmitStatus('error')
       setErrorMessage('Network error. Please check your connection and try again.')
     } finally {
