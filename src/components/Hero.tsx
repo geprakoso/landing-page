@@ -143,10 +143,10 @@ export default function Hero() {
             Prakoso Galih
           </h2>
           <div className="absolute left-6 bottom-6 flex flex-col items-center gap-4 text-white opacity-0 group-hover:opacity-100 group-[.active-effect]:opacity-100 transition-opacity duration-[1000ms]">
-            <a href="#" className="hover:text-blue-400 transition-colors"><Linkedin className="w-5 h-5" /></a>
-            <a href="#" className="hover:text-pink-400 transition-colors"><Instagram className="w-5 h-5" /></a>
-            <a href="#" className="hover:text-rose-400 transition-colors"><Github className="w-5 h-5" /></a>
-            <a href="#" className="hover:text-blue-400 transition-colors"><Threads className="w-5 h-5" /></a>
+            <a href="https://www.linkedin.com/in/danprakoso" className="hover:text-blue-400 transition-colors"><Linkedin className="w-5 h-5" /></a>
+            <a href="https://www.instagram.com/prakosoga/" className="hover:text-pink-400 transition-colors"><Instagram className="w-5 h-5" /></a>
+            <a href="https://github.com/geprakoso" className="hover:text-rose-400 transition-colors"><Github className="w-5 h-5" /></a>
+            <a href="https://www.threads.com/@prakosoga" className="hover:text-blue-400 transition-colors"><Threads className="w-5 h-5" /></a>
           </div>
         </div>
       </div>
